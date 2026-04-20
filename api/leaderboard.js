@@ -1,4 +1,6 @@
-const { kv } = require('@vercel/kv');
+const { Redis } = require('@upstash/redis');
+
+const redis = Redis.fromEnv();
 
 const MAX_ENTRIES = 10;
 const KV_KEY = 'nikud-leaderboard';
@@ -14,7 +16,7 @@ module.exports = async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const board = (await kv.get(KV_KEY)) || [];
+      const board = (await redis.get(KV_KEY)) || [];
       return res.status(200).json(board);
     }
 
@@ -28,12 +30,12 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Valid score is required' });
       }
 
-      const board = (await kv.get(KV_KEY)) || [];
+      const board = (await redis.get(KV_KEY)) || [];
       const date = new Date().toLocaleDateString('he-IL');
       board.push({ name: name.trim().substring(0, 20), score, date });
       board.sort((a, b) => b.score - a.score);
       if (board.length > MAX_ENTRIES) board.length = MAX_ENTRIES;
-      await kv.set(KV_KEY, board);
+      await redis.set(KV_KEY, board);
       return res.status(200).json(board);
     }
 
