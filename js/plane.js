@@ -1,5 +1,5 @@
-(function(global) {
-  'use strict';
+(function (global) {
+  "use strict";
 
   // Minimal all-white plane, facing up. Three overlapping shapes (wings,
   // tail, fuselage) that read clearly as a silhouette against the night sky.
@@ -28,33 +28,54 @@
       ctx.save();
       ctx.translate(this.x, this.y);
 
-      // Subtle ground shadow — only dark element, keeps the plane popping white
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.22)';
+      // Shadow
+      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
       ctx.beginPath();
-      ctx.ellipse(0, 54, 48, 7, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 58, 50, 8, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = "#ffffff";
 
-      // Main wings — horizontal ellipse across the middle
+      // === MAIN WINGS (tapered) ===
       ctx.beginPath();
-      ctx.ellipse(0, 6, 62, 13, 0, 0, Math.PI * 2);
+      ctx.moveTo(-75, 5);
+      ctx.lineTo(-10, 0);
+      ctx.lineTo(0, 8);
+      ctx.lineTo(10, 0);
+      ctx.lineTo(75, 5);
+      ctx.lineTo(65, 15);
+      ctx.lineTo(10, 10);
+      ctx.lineTo(0, 14);
+      ctx.lineTo(-10, 10);
+      ctx.lineTo(-65, 15);
+      ctx.closePath();
       ctx.fill();
 
-      // Tail wings — small horizontal ellipse near the bottom
+      // === TAIL WINGS ===
       ctx.beginPath();
-      ctx.ellipse(0, 44, 24, 6, 0, 0, Math.PI * 2);
+      ctx.moveTo(-30, 42);
+      ctx.lineTo(30, 42);
+      ctx.lineTo(22, 50);
+      ctx.lineTo(-22, 50);
+      ctx.closePath();
       ctx.fill();
 
-      // Fuselage with pointed nose — a teardrop pill running vertically
+      // === VERTICAL TAIL FIN ===
       ctx.beginPath();
-      ctx.moveTo(0, -60);
-      ctx.quadraticCurveTo(12, -42, 12, -18);
-      ctx.lineTo(12, 40);
-      ctx.quadraticCurveTo(12, 54, 0, 54);
-      ctx.quadraticCurveTo(-12, 54, -12, 40);
-      ctx.lineTo(-12, -18);
-      ctx.quadraticCurveTo(-12, -42, 0, -60);
+      ctx.moveTo(0, 18);
+      ctx.lineTo(10, 45);
+      ctx.lineTo(-10, 45);
+      ctx.closePath();
+      ctx.fill();
+
+      // === FUSELAGE (sleeker) ===
+      ctx.beginPath();
+      ctx.moveTo(0, -70); // nose
+      ctx.quadraticCurveTo(14, -40, 12, -10);
+      ctx.lineTo(10, 42);
+      ctx.quadraticCurveTo(0, 58, -10, 42);
+      ctx.lineTo(-12, -10);
+      ctx.quadraticCurveTo(-14, -40, 0, -70);
       ctx.closePath();
       ctx.fill();
 
