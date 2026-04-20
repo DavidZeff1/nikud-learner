@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>צַיָּד הַנִּקּוּד</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700;900&family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <section id="title-screen" class="screen active">
+      <h1 class="game-title">צַיָּד הַנִּקּוּד</h1>
+      <p class="tagline">תפסו את האות עם הניקוד הנכון!</p>
+      <div class="menu">
+        <button id="btn-start" class="btn btn-primary">התחל משחק</button>
+        <button id="btn-leaderboard" class="btn btn-accent">🏆 טבלת המובילים</button>
+        <button id="btn-instructions" class="btn">הוראות</button>
+      </div>
+      <div class="high-score">שיא: <span id="title-highscore">0</span></div>
+    </section>
+
+    <section id="name-screen" class="screen">
+      <h2 class="screen-heading">מה השם שלך?</h2>
+      <p class="name-subtitle">הכנס את שמך לפני שתתחיל</p>
+      <div class="name-input-wrap">
+        <input type="text" id="player-name-input" class="name-input" placeholder="השם שלך..." maxlength="20" autocomplete="off">
+      </div>
+      <div class="menu">
+        <button id="btn-play" class="btn btn-primary">שחק! 🚀</button>
+        <button id="btn-back-from-name" class="btn">חזרה</button>
+      </div>
+    </section>
+
+    <section id="instructions-screen" class="screen">
+      <h2 class="screen-heading">הוראות</h2>
+      <ul class="instructions">
+        <li>האזינו להברה בעברית שמושמעת.</li>
+        <li>שתי אותיות נופלות מלמעלה, עם אותו עיצור אך ניקוד שונה.</li>
+        <li>הזיזו את המטוס עם העכבר.</li>
+        <li>תפסו את האות עם הניקוד שנשמע.</li>
+        <li>טעות או אות שמגיעה לקרקע = איבוד חיים.</li>
+        <li>לחצו על הרמקול (או על רווח) כדי לשמוע שוב.</li>
+        <li>לחצו על P או Escape להשהיה.</li>
+      </ul>
+      <button id="btn-back-from-instructions" class="btn">חזרה</button>
+    </section>
+
+    <section id="game-screen" class="screen">
+      <div id="hud">
+        <div class="hud-stats">
+          <div class="hud-item">ניקוד: <span id="score">0</span></div>
+          <div class="hud-item">חיים: <span id="lives">3</span></div>
+          <div class="hud-item">שלב: <span id="level">1</span></div>
+        </div>
+        <div class="hud-controls">
+          <button id="btn-replay" class="icon-btn" title="השמע שוב" aria-label="השמע שוב">🔊</button>
+          <button id="btn-pause" class="icon-btn" title="השהה" aria-label="השהה">⏸</button>
+        </div>
+      </div>
+      <canvas id="game-canvas"></canvas>
+      <div id="round-flash" class="round-flash"></div>
+    </section>
+
+    <section id="pause-screen" class="screen overlay">
+      <h2 class="screen-heading paused">השהיה</h2>
+      <div class="menu">
+        <button id="btn-resume" class="btn btn-primary">המשך</button>
+        <button id="btn-quit" class="btn">תפריט ראשי</button>
+      </div>
+    </section>
+
+    <section id="gameover-screen" class="screen">
+      <h2 class="screen-heading gameover">המשחק נגמר</h2>
+      <p class="final-score">ניקוד סופי: <span id="final-score">0</span></p>
+      <p class="high-score">שיא: <span id="gameover-highscore">0</span></p>
+      <div id="new-highscore-badge" class="new-highscore-badge" style="display:none;">🎉 שיא חדש!</div>
+      <div class="menu">
+        <button id="btn-restart" class="btn btn-primary">שחק שוב</button>
+        <button id="btn-gameover-leaderboard" class="btn btn-accent">🏆 טבלת המובילים</button>
+        <button id="btn-main-menu" class="btn">תפריט ראשי</button>
+      </div>
+    </section>
+
+    <section id="leaderboard-screen" class="screen">
+      <h2 class="screen-heading leaderboard-heading">🏆 טבלת המובילים</h2>
+      <div class="leaderboard-container">
+        <div id="leaderboard-empty" class="leaderboard-empty" style="display:none;">
+          <p>עדיין אין תוצאות!</p>
+          <p class="leaderboard-empty-sub">שחקו כדי להיכנס לטבלה</p>
+        </div>
+        <table id="leaderboard-table" class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>שם</th>
+              <th>ניקוד</th>
+              <th>תאריך</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body"></tbody>
+        </table>
+      </div>
+      <div class="menu">
+        <button id="btn-back-from-leaderboard" class="btn">חזרה</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/plane.js"></script>
+  <script src="js/letter.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
