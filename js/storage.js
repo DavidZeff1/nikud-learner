@@ -5,6 +5,9 @@
   const LB_KEY = 'nikud-learner:leaderboard';
   const NAME_KEY = 'nikud-learner:playerName';
   const MAX_LEADERBOARD = 10;
+  const API_BASE = '/api/leaderboard';
+
+  // --- Local-only helpers (personal highscore & player name) ---
 
   function getHighScore() {
     try { return parseInt(localStorage.getItem(HS_KEY), 10) || 0; }
@@ -26,23 +29,54 @@
     catch (e) { /* storage may be unavailable */ }
   }
 
-  function getLeaderboard() {
+  // --- Leaderboard (global API, localStorage fallback) ---
+
+  function _getLocalBoard() {
     try {
       const raw = localStorage.getItem(LB_KEY);
       return raw ? JSON.parse(raw) : [];
     } catch (e) { return []; }
   }
 
-  function addLeaderboardEntry(name, score) {
+  function _setLocalBoard(board) {
+    try { localStorage.setItem(LB_KEY, JSON.stringify(board)); }
+    catch (e) { /* ignore */ }
+  }
+
+  async function getLeaderboard() {
     try {
-      const board = getLeaderboard();
+      const res = await fetch(API_BASE);
+      if (!res.ok) throw new Error('API error');
+      const board = await res.json();
+      _setLocalBoard(board); // cache locally
+      return board;
+    } catch (e) {
+      // Fallback to local storage
+      return _getLocalBoard();
+    }
+  }
+
+  async function addLeaderboardEntry(name, score) {
+    try {
+      const res = await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, score }),
+      });
+      if (!res.ok) throw new Error('API error');
+      const board = await res.json();
+      _setLocalBoard(board);
+      return board;
+    } catch (e) {
+      // Fallback to local storage
+      const board = _getLocalBoard();
       const date = new Date().toLocaleDateString('he-IL');
       board.push({ name, score, date });
       board.sort((a, b) => b.score - a.score);
       if (board.length > MAX_LEADERBOARD) board.length = MAX_LEADERBOARD;
-      localStorage.setItem(LB_KEY, JSON.stringify(board));
+      _setLocalBoard(board);
       return board;
-    } catch (e) { return []; }
+    }
   }
 
   global.NikudStorage = {

@@ -64,13 +64,10 @@
     game.start();
   }
 
-  function handleGameOver(score) {
+  async function handleGameOver(score) {
     const prevHs = NikudStorage.getHighScore();
     const isNewHigh = score > prevHs;
     if (isNewHigh) NikudStorage.setHighScore(score);
-
-    // Save to leaderboard
-    NikudStorage.addLeaderboardEntry(currentPlayerName, score);
 
     NikudUI.setText('final-score', score);
     updateHighScoreDisplays();
@@ -80,14 +77,23 @@
     badge.style.display = isNewHigh ? 'block' : 'none';
 
     NikudUI.show('gameover');
+
+    // Save to global leaderboard (fire & forget — UI is already shown)
+    await NikudStorage.addLeaderboardEntry(currentPlayerName, score);
   }
 
   // --- Leaderboard ---
-  function renderLeaderboard() {
-    const board = NikudStorage.getLeaderboard();
+  async function renderLeaderboard() {
     const tbody = document.getElementById('leaderboard-body');
     const emptyMsg = document.getElementById('leaderboard-empty');
     const table = document.getElementById('leaderboard-table');
+
+    // Show loading state
+    tbody.innerHTML = '';
+    emptyMsg.style.display = 'none';
+    table.style.display = 'none';
+
+    const board = await NikudStorage.getLeaderboard();
 
     tbody.innerHTML = '';
 
@@ -131,8 +137,8 @@
 
   function showLeaderboard(returnTo) {
     _leaderboardReturnTo = returnTo || 'title';
-    renderLeaderboard();
     NikudUI.show('leaderboard');
+    renderLeaderboard(); // async — table populates when data arrives
   }
 
   // Plane follows cursor across the whole window so the player's focus is never
