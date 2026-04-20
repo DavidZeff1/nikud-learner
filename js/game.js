@@ -182,7 +182,7 @@
         if (!L.caught && !L.missed && this._intersects(L.getBox(), catchBox)) {
           L.caught = true;
           if (L.isTarget) {
-            this.particles.burst(L.x, L.y, "#06d6a0", 34);
+            this.particles.burst(L.x, L.y, "#00e5ff", 34);
             resolution = "win";
           } else {
             this.particles.burst(L.x, L.y, "#ef476f", 28);

@@ -1,17 +1,17 @@
 :root {
-  --bg-0: #0b1625;
-  --bg-1: #1a2d4a;
-  --bg-2: #2a4a7c;
+  --bg-0: #0a2042;
+  --bg-1: #1a3a6e;
+  --bg-2: #2d5fa3;
   --primary: #ffd166;
   --primary-dark: #e0b24c;
-  --accent: #06d6a0;
-  --accent-dark: #05b88a;
+  --accent: #00e5ff;
+  --accent-dark: #00b8cc;
   --danger: #ef476f;
   --text: #f7f7f2;
-  --text-dim: #9db0c7;
-  --hud-bg: rgba(11, 22, 37, 0.85);
-  --glass: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-dim: #8bc4e8;
+  --hud-bg: rgba(10, 32, 66, 0.88);
+  --glass: rgba(74, 172, 254, 0.08);
+  --glass-border: rgba(74, 172, 254, 0.2);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -45,7 +45,7 @@ html, body {
 }
 .screen.active { display: flex; }
 .screen.overlay {
-  background: rgba(11, 22, 37, 0.92);
+  background: rgba(10, 32, 66, 0.92);
   backdrop-filter: blur(6px);
   z-index: 20;
 }
@@ -264,7 +264,7 @@ html, body {
   font-size: clamp(2.5rem, 7vw, 4.5rem);
   font-weight: 900;
   color: var(--primary);
-  text-shadow: 0 0 24px rgba(255, 209, 102, 0.7);
+  text-shadow: 0 0 24px rgba(255, 209, 102, 0.8);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s;
@@ -290,7 +290,7 @@ html, body {
   color: var(--accent);
   margin-bottom: 1.5rem;
   animation: badge-pop 0.6s ease-out;
-  text-shadow: 0 0 18px rgba(6, 214, 160, 0.5);
+  text-shadow: 0 0 18px rgba(0, 229, 255, 0.5);
 }
 @keyframes badge-pop {
   0% { transform: scale(0.3); opacity: 0; }
